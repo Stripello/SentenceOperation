@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace SentenceOperation
 {
@@ -12,6 +8,7 @@ namespace SentenceOperation
         {
             Console.WriteLine("Please, enter char for searching in sentence.");
             var userChar = Console.ReadKey().KeyChar;
+            Console.WriteLine();
             int i = 0;
             foreach (var ch in sentence.ToArray())
             {
@@ -94,10 +91,11 @@ namespace SentenceOperation
 
         internal static string ChangeThirdSymbol(string sentence)
         {
-            Console.WriteLine("Please< enter symbol for change.");
+            Console.WriteLine("Please enter symbol for change.");
             var replacingChar = Console.ReadKey().KeyChar;
+            Console.WriteLine();
             var tempArray = sentence.ToCharArray();
-            for (int i = 3; i < sentence.Length; i = i + 3)
+            for (int i = 3; i < sentence.Length; i += 3)
             {
                 tempArray[i] = replacingChar;
             }
@@ -107,10 +105,45 @@ namespace SentenceOperation
         internal static string ReverseOrder(string sentence)
         {
             var tempArray = sentence.Split(' ');
+            if (tempArray.Last().EndsWith('.'))
+            {
+                tempArray[^1] = tempArray[^1][..(tempArray.Length - 2)];
+                tempArray[0] = tempArray[0] + '.';
+            }
+            if (Char.IsUpper(tempArray[0][0]))
+            {
+                tempArray[0] = tempArray[0].ToLower();
+                tempArray[^1] =Char.ToUpper(tempArray.Last()[0]) + tempArray[^1][1..];
+            }
+
+
             tempArray = tempArray.Reverse().ToArray();
             return string.Join(" ", tempArray);
         }
 
+        internal static string WriteAllInclusions(string sentence)
+        {
+            Console.WriteLine("Please, enter all words to search using whitespace as divider.");
+            var arrayForSearching = Console.ReadLine().Split(' ');
+            var sentenceArray = sentence.Split(' ');
+            for (int i=0; i < sentenceArray.Length; i++)
+            {
+                if (!Char.IsLetterOrDigit(sentenceArray[i].Last()))
+                {
+                    sentenceArray[i] = sentenceArray[i][0..(sentenceArray[i].Length-2)];
+                }
+            }
 
+            var answer = new StringBuilder();
+            foreach (var word in sentence.Split(' '))
+            {
+                if (arrayForSearching.Contains(word))
+                {
+                    answer.Append(word);
+                    answer.Append(' ');
+                }
+            }
+            return answer.ToString();
+        }
     }
 }
